@@ -126,6 +126,30 @@ The deployed application needs a PostgreSQL service that is securely reachable f
 
 To attach a custom domain, open the Vercel project and use **Settings → Domains**, then follow Vercel's DNS instructions for the domain provider.
 
+## Deploying to Cloudflare Workers
+
+This project uses `@opennextjs/cloudflare`. A normal `npm run build` creates only the standard `.next` output. Cloudflare Workers requires the additional OpenNext conversion step, which creates `.open-next/worker.js`, `.open-next/assets/`, and the compiled configuration under `.open-next/.build/`.
+
+Local commands:
+
+```bash
+npm run build                 # Standard Next.js build
+npm run build:cloudflare      # Next.js build plus OpenNext Worker output
+npm run preview               # Build and preview in the Workers runtime
+npm run deploy                # Build and deploy (run only when deployment is intended)
+```
+
+For a Git-connected Cloudflare Workers Build, set the project root to this landing-page folder and use:
+
+```text
+Build command:  npm run build:cloudflare
+Deploy command: npx @opennextjs/cloudflare deploy
+```
+
+Do not use `npm run build` as the Cloudflare build command: it does not create the compiled OpenNext configuration required by the deploy command. Do not use `npx wrangler deploy` directly for this OpenNext project.
+
+Set `NEXT_PUBLIC_SITE_URL` as a Cloudflare build variable when the production URL is known. Set `MARKETING_DATABASE_URL` only as an encrypted runtime Worker secret; never prefix it with `NEXT_PUBLIC_` or commit it. The production PostgreSQL host must be reachable from Cloudflare Workers. For production connection pooling, Cloudflare Hyperdrive is recommended; if used, add its binding and adapt the server-only database connection to consume the Hyperdrive connection string.
+
 ## Legal and production notes
 
 The `/privacy` and `/terms` pages are plainly marked starter documents. They avoid making guarantees, but they are not substitutes for legal review. Before public launch, add infrastructure-level rate limiting or stronger bot protection, database backups, monitoring and failure alerts, credential rotation, a finalized data retention/deletion process, and an operational test of the production database connection.
