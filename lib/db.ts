@@ -1,5 +1,6 @@
 import "server-only";
 
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { Pool } from "pg";
 
 declare global {
@@ -8,7 +9,19 @@ declare global {
 }
 
 export function getMarketingDatabasePool(): Pool {
-  const connectionString = process.env.MARKETING_DATABASE_URL;
+  let cloudflareConnectionString: string | undefined;
+
+  try {
+    const cloudflareEnv = getCloudflareContext().env as CloudflareEnv & {
+      MARKETING_DATABASE_URL?: string;
+    };
+    cloudflareConnectionString = cloudflareEnv.MARKETING_DATABASE_URL;
+  } catch {
+    // Outside the Workers runtime, Next.js reads the local .env file instead.
+  }
+
+  const connectionString =
+    cloudflareConnectionString ?? process.env.MARKETING_DATABASE_URL;
 
   if (!connectionString) {
     throw new Error("MARKETING_DATABASE_URL is not configured");
