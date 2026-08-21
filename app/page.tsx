@@ -8,6 +8,9 @@ import { HowItWorks } from "@/components/HowItWorks";
 import { ProblemSection } from "@/components/ProblemSection";
 import { ProductScreenshots } from "@/components/ProductScreenshots";
 
+const contactEmail =
+  process.env.CONTACT_EMAIL?.trim() || "smjdataaisolutions@gmail.com";
+
 export default function Home() {
   return (
     <>
@@ -36,10 +39,9 @@ export default function Home() {
             </div>
             <div>
               <p>Want to know more about One Stop Analytics or the beta program? Get in touch with SMJ Data &amp; AI Solutions.</p>
-              <a className="text-link" href={`mailto:${process.env.CONTACT_EMAIL || "hello@yourdomain.com"}`}>
-                {process.env.CONTACT_EMAIL || "hello@yourdomain.com"}
+              <a className="text-link" href={`mailto:${contactEmail}`}>
+                {contactEmail}
               </a>
-              <span className="placeholder-note">Placeholder — replace before launch</span>
             </div>
           </div>
         </section>
