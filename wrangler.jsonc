@@ -3,6 +3,21 @@
   "main": ".open-next/worker.js",
   "name": "smj-marketing",
   "keep_vars": true,
+  "workers_dev": true,
+  "preview_urls": false,
+  "routes": [
+    {
+      "pattern": "smjdataai.com",
+      "custom_domain": true
+    },
+    {
+      "pattern": "www.smjdataai.com",
+      "custom_domain": true
+    }
+  ],
+  "vars": {
+    "NEXT_PUBLIC_SITE_URL": "https://smjdataai.com"
+  },
   "compatibility_date": "2026-08-20",
   "compatibility_flags": [
     "nodejs_compat",
@@ -15,7 +30,8 @@
   "services": [
     {
       "binding": "WORKER_SELF_REFERENCE",
-      "service": "smj-marketing"
+      "service": "smj-marketing",
+      "environment": "production"
     }
   ],
   "images": {
